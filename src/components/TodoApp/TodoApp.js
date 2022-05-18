@@ -6,31 +6,29 @@ const TodoApp = () => {
   const [error, setError] = useState("");
   const [button, setButton] = useState(true);
   const [edit, setEdit] = useState("");
-  const [clearButton, setClearButton] = useState(false)
+  const [clearButton, setClearButton] = useState(false);
 
   useEffect(() => {
     let saveItems = JSON.parse(localStorage.getItem("list"));
     setItems(saveItems || []);
   }, []);
 
-    useEffect(() => {
-  setInput("");
-  if(items.length > 0){
-    setClearButton(true);
-  }
-
-  },
-  [items] )
   useEffect(() => {
-    setError('');
-
-  }, [input])
+    setInput("");
+    if (items.length > 0) {
+      setClearButton(true);
+    }
+  }, [items]);
+  useEffect(() => {
+    setError("");
+  }, [input]);
 
   const addItem = () => {
     if (input.length >= 1) {
       let itemsUpdated = JSON.stringify([...items, input]);
       localStorage.setItem("list", itemsUpdated);
       setItems([...items, input]);
+      setClearButton(true);
     } else {
       setError("List item must have at least 1 character");
     }
@@ -52,11 +50,16 @@ const TodoApp = () => {
     }
   };
   const clearAll = () => {
-    localStorage.clear()
+    localStorage.clear();
     setItems([]);
     setButton(true);
     setClearButton(false);
-  }
+  };
+  const removeItem = (item) => {
+    let listAfterRemove = items.filter((i) => i !== item);
+    localStorage.setItem("list", JSON.stringify(listAfterRemove));
+    setItems(listAfterRemove);
+  };
   return (
     <div className="container pb-5" style={{ maxWidth: "50%" }}>
       <div className="row pb-5">
@@ -84,8 +87,12 @@ const TodoApp = () => {
             <button
               className={"btn btn-block font-weight-bold text-white h-100"}
               // style={{ backgroundColor: "#FFB703" }}
-              style={(clearButton) ? {display:"inline-block", backgroundColor: "#FFB703"} : {display: 'none', backgroundColor: "#FFB703"}}
-              onClick={()=>clearAll()}
+              style={
+                clearButton
+                  ? { display: "inline-block", backgroundColor: "#FFB703" }
+                  : { display: "none", backgroundColor: "#FFB703" }
+              }
+              onClick={() => clearAll()}
             >
               Clear
             </button>
@@ -130,6 +137,9 @@ const TodoApp = () => {
                         border: "none",
                         padding: "8px",
                         background: "none",
+                      }}
+                      onClick={() => {
+                        removeItem(item);
                       }}
                     >
                       <i className="fas fa-trash"></i>
