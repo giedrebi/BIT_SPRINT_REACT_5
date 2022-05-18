@@ -1,26 +1,42 @@
 import React, { useEffect, useState } from "react";
 import "./TodoApp.css";
+
 const TodoApp = () => {
   const [items, setItems] = useState([]);
   const [input, setInput] = useState("");
   const [error, setError] = useState("");
+  const [button, setButton] = useState(true);
+  const [edit, setEdit] = useState("");
 
   useEffect(() => {
     let saveItems = JSON.parse(localStorage.getItem("list"));
     setItems(saveItems || []);
   }, []);
-
   const addItem = () => {
     if (input.length >= 1) {
       let itemsUpdated = JSON.stringify([...items, input]);
       localStorage.setItem("list", itemsUpdated);
       setItems([...items, input]);
-      // setClearButton(true);
     } else {
       setError("List item must have at least 1 character");
     }
   };
-
+  const editItem = (item) => {
+    setInput(item);
+    setEdit(item);
+    setButton(false);
+  };
+  const updateItem = () => {
+    if (input.length >= 3) {
+      let listAfterUpdate = JSON.parse(localStorage.getItem("list"));
+      listAfterUpdate.splice(listAfterUpdate.indexOf(edit), 1, input);
+      localStorage.setItem("list", JSON.stringify(listAfterUpdate));
+      setItems(listAfterUpdate);
+      setButton(true);
+    } else {
+      setError("List item must have at least 1 character");
+    }
+  };
   return (
     <div className="container pb-5" style={{ maxWidth: "50%" }}>
       <div className="row pb-5">
@@ -32,13 +48,18 @@ const TodoApp = () => {
               placeholder={"Add item.."}
               value={input}
               onChange={(input) => setInput(input.target.value)}
+              onKeyDown={(e) => {
+                if (e.code === "Enter") {
+                  button ? addItem(input) : updateItem(input);
+                }
+              }}
             />
             <button
               className={"btn btn-block font-weight-bold text-white h-100"}
               style={{ backgroundColor: "#219EBC" }}
-              onClick={(input) => addItem(input)}
+              onClick={(input) => (button ? addItem(input) : updateItem(input))}
             >
-              Add
+              {button ? "Add" : "Update"}
             </button>
             <button
               className={"btn btn-block font-weight-bold text-white h-100"}
@@ -73,6 +94,9 @@ const TodoApp = () => {
                         border: "none",
                         padding: "8px",
                         background: "none",
+                      }}
+                      onClick={() => {
+                        editItem(item);
                       }}
                     >
                       <i className="fas fa-pen"></i>
