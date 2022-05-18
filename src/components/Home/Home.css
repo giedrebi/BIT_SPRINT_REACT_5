@@ -1,0 +1,13 @@
+@media (max-width: 576px) {
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .row {
+        flex-direction: column;
+    }
+    .w-75 {
+        margin: auto;
+    }
+}
