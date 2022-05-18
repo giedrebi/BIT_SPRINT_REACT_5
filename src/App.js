@@ -6,6 +6,7 @@ import Contact from "./components/Contact/Contact";
 import Footer from "./components/Footer/Footer";
 import "./App.css";
 import TodoApp from "./components/TodoApp/TodoApp";
+import ErrorPhoto from "./assets/pablo-prohibited-content.png";
 
 function App() {
   return (
@@ -18,8 +19,11 @@ function App() {
         <Route
           path="*"
           element={
-            <main style={{ padding: "1rem" }}>
+            <main style={{ padding: "1rem", textAlign: "center" }}>
               <p>There's nothing here!</p>
+              <img src={ErrorPhoto}
+              alt="error-page"
+              style={{ width: "50%", marginTop: "30px", margin: "auto" }}/>
             </main>
           }
         />
@@ -28,5 +32,4 @@ function App() {
     </BrowserRouter>
   );
 }
-
 export default App;
