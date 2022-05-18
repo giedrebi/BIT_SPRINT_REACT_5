@@ -1,17 +1,31 @@
 import React, { useEffect, useState } from "react";
 import "./TodoApp.css";
-
 const TodoApp = () => {
   const [items, setItems] = useState([]);
   const [input, setInput] = useState("");
   const [error, setError] = useState("");
   const [button, setButton] = useState(true);
   const [edit, setEdit] = useState("");
+  const [clearButton, setClearButton] = useState(false)
 
   useEffect(() => {
     let saveItems = JSON.parse(localStorage.getItem("list"));
     setItems(saveItems || []);
   }, []);
+
+    useEffect(() => {
+  setInput("");
+  if(items.length > 0){
+    setClearButton(true);
+  }
+
+  },
+  [items] )
+  useEffect(() => {
+    setError('');
+
+  }, [input])
+
   const addItem = () => {
     if (input.length >= 1) {
       let itemsUpdated = JSON.stringify([...items, input]);
@@ -37,6 +51,12 @@ const TodoApp = () => {
       setError("List item must have at least 1 character");
     }
   };
+  const clearAll = () => {
+    localStorage.clear()
+    setItems([]);
+    setButton(true);
+    setClearButton(false);
+  }
   return (
     <div className="container pb-5" style={{ maxWidth: "50%" }}>
       <div className="row pb-5">
@@ -63,7 +83,9 @@ const TodoApp = () => {
             </button>
             <button
               className={"btn btn-block font-weight-bold text-white h-100"}
-              style={{ backgroundColor: "#FFB703" }}
+              // style={{ backgroundColor: "#FFB703" }}
+              style={(clearButton) ? {display:"inline-block", backgroundColor: "#FFB703"} : {display: 'none', backgroundColor: "#FFB703"}}
+              onClick={()=>clearAll()}
             >
               Clear
             </button>
