@@ -15,7 +15,7 @@ function Contact() {
             className="card border-white text-center"
             style={{
             backgroundColor: "#219ebc",
-            width: "40%",
+            width: "60%",
             borderRadius: "20px",
             }}
         >

@@ -7,7 +7,7 @@ function Home() {
         <div className="container text-center">
         <div className="row">
             <div className="col">
-            <div className="w-75" style={{ marginTop: "120px" }}>
+            <div className="w-75" style={{ marginTop: "100px" }}>
                 <h1 className="text-capitalize">Welcome to shopping list app!</h1>
                 <h4>
                 In this app you can add, edit, delete items from your list, or
